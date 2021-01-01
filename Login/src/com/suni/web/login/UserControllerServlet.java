@@ -54,6 +54,8 @@ public class UserControllerServlet extends HttpServlet {
 			case "SIGNUP":
 				addUser(request,response);
 				break;
+			case "LOGIN":
+				loginUser(request,response);
 			default:
 				addUser(request, response);
 
@@ -65,6 +67,23 @@ public class UserControllerServlet extends HttpServlet {
 		}
 		
 	}
+	private void loginUser(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		//read user info from form
+		String userName=request.getParameter("username");
+		String password=request.getParameter("password");
+		
+		//validate user name password
+		boolean valid=userDbUtil.validateUser(userName,password);
+		
+		//if valid redirect into Home page
+		if(valid) {
+			RequestDispatcher dispatcher = request.getRequestDispatcher("/home-page.jsp");
+			dispatcher.forward(request, response);
+		}
+		
+	}
+
 	private void addUser(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		//read user info from form.
@@ -80,7 +99,7 @@ public class UserControllerServlet extends HttpServlet {
 		//add user to database
 		userDbUtil.addUser(theUser);
 		//Display success message
-		RequestDispatcher dispatcher = request.getRequestDispatcher("/sign-up.jsp");
+		RequestDispatcher dispatcher = request.getRequestDispatcher("/success-page.jsp");
 		dispatcher.forward(request, response);
 		
 	}

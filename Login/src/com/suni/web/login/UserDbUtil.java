@@ -2,9 +2,13 @@ package com.suni.web.login;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import javax.servlet.RequestDispatcher;
 import javax.sql.DataSource;
+
+import org.apache.catalina.connector.Response;
 
 public class UserDbUtil {
 	private DataSource dataSource;
@@ -32,6 +36,7 @@ public class UserDbUtil {
 			
 			myStmt.execute();
 			// close the connection
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -50,6 +55,32 @@ public class UserDbUtil {
 			e.printStackTrace();
 		}
 		
+	}
+
+	public boolean validateUser(String userName, String password) {
+		
+		//Connect to DB
+		Connection myConn=null;
+		PreparedStatement myStmt=null;
+		ResultSet myRs=null;
+		
+		String sql="select name from users where name=? and password=?";
+		try {
+			myConn=dataSource.getConnection();
+			
+			myStmt=myConn.prepareStatement(sql);
+			myStmt.setString(1, userName);
+			myStmt.setString(2, password);
+			myRs=myStmt.executeQuery();
+			
+			if(myRs.next()) {
+				return true;
+			}
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
 	}
 
 }
