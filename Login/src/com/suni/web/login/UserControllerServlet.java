@@ -11,11 +11,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 
-
-
-/**
- * Servlet implementation class UserControllerServlet
- */
 @WebServlet("/UserControllerServlet")
 public class UserControllerServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -56,6 +51,7 @@ public class UserControllerServlet extends HttpServlet {
 				break;
 			case "LOGIN":
 				loginUser(request,response);
+				break;
 			default:
 				addUser(request, response);
 
@@ -78,9 +74,15 @@ public class UserControllerServlet extends HttpServlet {
 		
 		//if valid redirect into Home page
 		if(valid) {
+			request.setAttribute("USER_NAME", userName);
+			RequestDispatcher dispatcher = request.getRequestDispatcher("/home-page.jsp");
+			dispatcher.forward(request, response);
+		} else {
+			request.setAttribute("USER_NAME", "INVALID CREDENTIAL");
 			RequestDispatcher dispatcher = request.getRequestDispatcher("/home-page.jsp");
 			dispatcher.forward(request, response);
 		}
+		
 		
 	}
 

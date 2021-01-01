@@ -80,7 +80,24 @@ public class UserDbUtil {
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
+		finally {
+			close(myConn,myStmt,myRs);
+		}
 		return false;
+	}
+
+	private void close(Connection myConn, PreparedStatement myStmt, ResultSet myRs) {
+		try {
+			if (myConn != null)
+				myConn.close();
+			if (myStmt != null)
+				myStmt.close();
+			if (myRs !=null)
+				myRs.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
 	}
 
 }
